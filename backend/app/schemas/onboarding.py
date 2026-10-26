@@ -20,6 +20,8 @@ class FinancialProfileIn(BaseModel):
     income_pattern: Optional[Literal["fixed", "irregular", "mixed"]] = None
     typical_income: Optional[Money] = Field(default=None, ge=0)
     currency: Optional[str] = Field(default=None, min_length=3, max_length=3)
+    # Planned monthly saving shown in the monthly cash flow. A plan only.
+    savings_plan_amount: Optional[Money] = Field(default=None, ge=0)
 
 
 class FinancialProfileOut(FinancialProfileIn):
@@ -62,6 +64,25 @@ class SavingsGoalOut(SavingsGoalIn):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class CommitmentIn(BaseModel):
+    name: str = Field(min_length=1, max_length=100)
+    amount: Money = Field(gt=0)
+    due_date: Optional[date] = None
+    is_paid: bool = False
+
+
+class CommitmentOut(CommitmentIn):
+    id: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class CommitmentsUpdate(BaseModel):
+    """Replaces the user's full list of essential commitments."""
+
+    commitments: list[CommitmentIn]
 
 
 class OnboardingPatch(BaseModel):

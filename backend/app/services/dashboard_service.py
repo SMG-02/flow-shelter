@@ -26,6 +26,8 @@ from app.schemas.dashboard import (
     DashboardUser,
     ExpectedPayment,
     SavingsGoalProgress,
+    UpcomingCommitment,
+    UpcomingCommitments,
 )
 
 ZERO = Decimal("0.00")
@@ -243,3 +245,37 @@ def build_dashboard_overview(db: Session, user_id: int) -> DashboardOverview:
 
 def build_alerts(db: Session, user_id: int) -> list[DashboardAlert]:
     return build_dashboard_overview(db, user_id).alerts
+
+
+def build_upcoming(db: Session, user_id: int) -> UpcomingCommitments:
+    """Unpaid commitments due inside the forecast horizon, soonest first."""
+
+    today = date.today()
+    _, window_end = _window(today)
+
+    rows = list(
+        db.scalars(
+            select(FinancialCommitment)
+            .where(
+                FinancialCommitment.user_id == user_id,
+                FinancialCommitment.is_paid.is_(False),
+                FinancialCommitment.due_date.is_not(None),
+                FinancialCommitment.due_date >= today,
+                FinancialCommitment.due_date <= window_end,
+            )
+            .order_by(FinancialCommitment.due_date, FinancialCommitment.id)
+        )
+    )
+
+    total = sum((_money(row.amount) for row in rows), ZERO)
+    return UpcomingCommitments(
+        commitments=[
+            UpcomingCommitment(
+                name=row.name,
+                amount=_money(row.amount),
+                due_date=row.due_date,
+            )
+            for row in rows
+        ],
+        total=total,
+    )

@@ -8,7 +8,9 @@ authors = [
     { name = "Flet developer", email = "you@example.com" }
 ]
 dependencies = [
-    "flet>=1.0.5"
+    "flet>=1.0.5",
+    # Talks to the FastAPI backend (src/api/client.py).
+    "httpx>=0.27",
 ]
 
 [dependency-groups]

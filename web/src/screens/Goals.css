@@ -1,0 +1,57 @@
+/* Styles for the savings goal planner. Everything is scoped under .fsg
+   so it cannot clash with App.css or the Welcome screen styles. */
+.fsg { max-width: 1000px; margin: 0 auto; padding: 2rem 1.25rem 4rem; color: #202322; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 15px; }
+.fsg * { box-sizing: border-box; }
+.fsg h1 { font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.1; font-weight: 650; letter-spacing: -.035em; margin: .25rem 0; }
+.fsg h2 { font-size: 1.75rem; font-weight: 650; letter-spacing: -.03em; margin: .4rem 0; }
+.fsg h3 { font-size: 1.05rem; font-weight: 650; margin: 0 0 .5rem; }
+.fsg small { color: #686d69; }
+.fsg button, .fsg input, .fsg select { font: inherit; }
+.fsg button { cursor: pointer; }
+
+.fsg .btn { min-height: 44px; border: 1px solid #202322; background: #202322; color: #fff; padding: .7rem 1.1rem; border-radius: 7px; font-weight: 650; }
+.fsg .btn:hover { background: #3b403d; }
+.fsg .btn:disabled { opacity: .6; cursor: not-allowed; }
+.fsg .btn.secondary { background: #fff; color: #202322; border-color: #b7bbb7; }
+.fsg .back { border: 0; background: none; font-weight: 650; margin-bottom: 1.5rem; padding: 0; }
+.fsg .actions, .fsg .footer-actions { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
+.fsg .footer-actions { justify-content: flex-end; border-top: 1px solid #dedfdb; margin-top: 2rem; padding-top: 1.25rem; }
+.fsg .eyebrow { font-size: .7rem; font-weight: 750; letter-spacing: .12em; color: #696e6a; margin: 0; }
+.fsg .muted { color: #686d69; max-width: 60ch; }
+
+.fsg .page-title { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 1.5rem; }
+.fsg .page-title p { margin: .4rem 0; color: #666b67; }
+
+.fsg .card { background: #fff; border: 1px solid #d2d5d1; border-radius: 9px; padding: 1.25rem; min-width: 0; margin-bottom: 1rem; }
+.fsg .card.clickable { cursor: pointer; transition: transform .15s; }
+.fsg .card.clickable:hover { transform: translateY(-2px); border-color: #858b86; }
+.fsg .card p { color: #686d69; margin: .25rem 0 0; }
+.fsg .goal-card { max-width: 800px; }
+.fsg .empty { max-width: 800px; border-style: dashed; }
+.fsg .form-card { max-width: 760px; }
+.fsg .form-card > .field { margin: 1rem 0; }
+
+.fsg .status { display: inline-flex; width: max-content; padding: .25rem .5rem; border: 1px solid #acb1ac; background: #eef0ed; border-radius: 999px; font-size: .7rem; font-weight: 700; color: #434844; }
+.fsg .progress { height: 8px; background: #e3e5e1; border-radius: 99px; overflow: hidden; margin: 1rem 0; }
+.fsg .progress i { display: block; height: 100%; background: #555b57; border-radius: 99px; }
+.fsg .section-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+
+.fsg .three-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+.fsg .three-stats > div { display: flex; flex-direction: column; gap: .35rem; }
+.fsg-snapshot { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0; }
+
+.fsg .notice { padding: .9rem 1rem; border-left: 3px solid #727873; background: #e9ebe8; margin: 1rem 0; color: #454a46; }
+.fsg .notice.warning { background: #efeee8; border-color: #81795b; }
+.fsg .notice button { border: 0; background: none; text-decoration: underline; padding: 0; }
+
+.fsg .field { display: flex; flex-direction: column; gap: .4rem; font-size: .82rem; font-weight: 650; min-width: 0; }
+.fsg .field input, .fsg .field select { width: 100%; min-height: 44px; border: 1px solid #b9bdb9; background: #fff; border-radius: 6px; padding: .7rem .75rem; color: #202322; }
+.fsg .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+
+@media (max-width: 850px) {
+  .fsg .form-grid, .fsg-snapshot { grid-template-columns: 1fr; }
+  .fsg .page-title { align-items: flex-start; flex-direction: column; }
+}
+@media (max-width: 560px) {
+  .fsg .three-stats { grid-template-columns: 1fr; }
+}

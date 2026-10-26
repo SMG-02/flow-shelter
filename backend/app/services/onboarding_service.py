@@ -179,12 +179,33 @@ def complete(db: Session, user_id: int) -> OnboardingProgress:
     return progress
 
 
-def has_commitments(db: Session, user_id: int) -> bool:
-    return (
-        db.scalar(
-            select(FinancialCommitment.id)
+def list_commitments(db: Session, user_id: int) -> list[FinancialCommitment]:
+    return list(
+        db.scalars(
+            select(FinancialCommitment)
             .where(FinancialCommitment.user_id == user_id)
-            .limit(1)
+            .order_by(
+                FinancialCommitment.due_date.asc().nulls_last(),
+                FinancialCommitment.id,
+            )
         )
-        is not None
     )
+
+
+def replace_commitments(db: Session, user_id: int, items) -> list[FinancialCommitment]:
+    """Replace the user's commitments in one transaction (retry-safe)."""
+    db.execute(
+        delete(FinancialCommitment).where(FinancialCommitment.user_id == user_id)
+    )
+    db.add_all(
+        FinancialCommitment(
+            user_id=user_id,
+            name=item.name,
+            amount=item.amount,
+            due_date=item.due_date,
+            is_paid=item.is_paid,
+        )
+        for item in items
+    )
+    db.commit()
+    return list_commitments(db, user_id)

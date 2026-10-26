@@ -1,7 +1,15 @@
 from datetime import date
 from decimal import Decimal
 
-from sqlalchemy import CheckConstraint, Date, ForeignKey, Numeric, String
+from sqlalchemy import (
+    Boolean,
+    CheckConstraint,
+    Date,
+    ForeignKey,
+    Numeric,
+    String,
+    text,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base, TimestampMixin
@@ -34,4 +42,8 @@ class SavingsGoal(Base, TimestampMixin):
     target_date: Mapped[date | None] = mapped_column(Date)
     priority: Mapped[str] = mapped_column(
         String(10), nullable=False, default="medium", server_default="medium"
+    )
+    # Exactly one goal may be "active" at a time; the rest are planned.
+    is_active: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=True, server_default=text("true")
     )

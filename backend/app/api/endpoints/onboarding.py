@@ -5,6 +5,7 @@ from app.api.dependencies import get_current_user
 from app.db.session import get_db
 from app.models.user import User
 from app.schemas.onboarding import (
+    CommitmentsUpdate,
     OnboardingDraft,
     OnboardingPatch,
     OnboardingStepUpdate,
@@ -44,6 +45,31 @@ def update_step(
     """Record which step the user is on (1-5) for resumable onboarding."""
     service.update_step(db, current_user.id, body.current_step)
     return service.get_draft(db, current_user.id)
+
+
+@router.get("/commitments", response_model=CommitmentsUpdate)
+def list_commitments(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Essential bills (rent, transport, ...) used by the dashboard forecast."""
+    return CommitmentsUpdate(
+        commitments=service.list_commitments(db, current_user.id)
+    )
+
+
+@router.put("/commitments", response_model=CommitmentsUpdate)
+def save_commitments(
+    body: CommitmentsUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Replace all commitments. Send the full list on every save."""
+    return CommitmentsUpdate(
+        commitments=service.replace_commitments(
+            db, current_user.id, body.commitments
+        )
+    )
 
 
 @router.post("/complete", response_model=OnboardingDraft)

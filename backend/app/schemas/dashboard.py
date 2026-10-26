@@ -25,6 +25,17 @@ class SavingsGoalProgress(BaseModel):
     progress_percentage: int
 
 
+class UpcomingCommitment(BaseModel):
+    name: str
+    amount: Money
+    due_date: date
+
+
+class UpcomingCommitments(BaseModel):
+    commitments: list[UpcomingCommitment]
+    total: Money
+
+
 class DashboardAlert(BaseModel):
     type: str
     severity: str
